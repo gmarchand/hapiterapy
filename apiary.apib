@@ -494,6 +494,8 @@ Return the list of media.
 
 ### Add media [POST]
 
+
+
 + Request (application/json)
 
         {
@@ -511,6 +513,9 @@ Return the list of media.
 
 ## Media [/api/media/{id}]
 
+**Warning** : On est bien d'accord que l'ensemble des ressources binaires proviennent de la BDDPE et non d'ATG
+
+When you update the ressource file of this object, `path` will not be the same, a unique id as a timestamp guarantie unicity of the ressource file
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the media.
@@ -560,7 +565,6 @@ The HTTP headers to use when making a simple upload request include:
 
 + Response 201 (application/json)
 
-+ Response 204 (application/json)
 
 # Group Content
 
@@ -669,7 +673,7 @@ This method allow users to create collection.
           }
         }
 
-+ Response 200 (application/json)
++ Response 201 (application/json)
 
   + Headers
 
@@ -841,6 +845,7 @@ This method allow users to delete a content. Only collection are deletable.
           
 ## Media link [/api/contents/{id}/media/{mediaId}]
 
+
 + Parameters
   + id (required, number, `1`) ... Numeric `id` of the content.
   + mediaId (required, number, `12752996`) ... Numeric `id` of the media.
@@ -852,17 +857,12 @@ Attach the given mediaId to the current content
 
 + Response 201 (application/json)
 
-+ Response 404 (application/json)
-
 
 ### dettach a media [DELETE]
 
 Attach the given mediaId to the current content
 
-+ Response 201 (application/json)
-
-+ Response 404 (application/json)
-
++ Response 204 (application/json)
 
 
 ## Members [/api/contents/{id}/members]
@@ -913,6 +913,7 @@ Attach the given mediaId to the current content
         ]
 
 ## Reviews [/api/contents/{id}/reviews]
+**WAIT**
 
 + Parameters
   + id (required, number, `1`) ... Numeric `id` of the content.
@@ -970,7 +971,11 @@ Attach the given mediaId to the current content
           }
         ]
 
+## Tags link [/api/contents/{id}/tags/{tagsId}]
+
 ## Awards [/api/contents/{id}/awards]
+
+**WAIT**
 
 + Parameters
   + id (required, number, `1`) ... Numeric `id` of the content.
