@@ -1,25 +1,80 @@
 FORMAT: 1A
 
-# BDDPe
+# Hapyterapy
 Provides the editorial data
 
+## TODO
 - TODO : provide search and filtering and pagination in lists
 - TODO : REST filtering
--       OK TODO : Channel list API
+- OK TODO : Channel list API
 - TODO : bad request in case of invalid input
 - TODO : /contents/id PUT : creation de contenu
 - TODO : /contents/id/?full=true . Kill summary
--       OK TODO : media sans "s"
--       OK TODO : /contents/id/overloads
+- OK TODO : media sans "s"
+- OK TODO : /contents/id/overloads
 - TODO : url path media : remove and add url instead
 - TODO : sub genre a ajouter dans le genre avec un attribut
--       OK TODO : /api/events/ pour festivals
+- OK TODO : /api/events/ pour festivals
 - TODO : add jobs in member list
 - TODO : members changer order en rank
 - TODO : Festival mettre le code ISO
--       OK TODO : Ajouter /api/media/id/file POST
--       OK TODO : Tags : /api/tags POST PUT
+- OK TODO : Ajouter /api/media/id/file POST
+- OK TODO : Tags : /api/tags POST PUT
 - TODO : Subchild /api/content/id/subobject
+
+## Date
+All dates are represented by [ISO_8601](http://en.wikipedia.org/wiki/ISO_8601)
+
+## Authentication
+Currently the API provides only a basic http authentication. Please refer to the config file of the Data API to retrieve a valid account.
+
+## Basic usage
+This API is RESTfull and uses the following methods as described:
+
+| Method | Usage                                 |
+| ------ | ------------------------------------- |
+| POST   | To create a resource                  |
+| GET    | Get a resource or a list of resources |
+| PUT    | To update a resource                  |
+| DELETE | To delete resource                    |
+
+## Description Of Usual Server Responses
+The common [HTTP Response Status Codes](https://github.com/for-GET/know-your-http-well/blob/master/status-codes.md) are used for API responses.
+
+Successful GET and PUT request will return `200` status code.
+
+Successful POST request will return `201` status code.
+
+Successful DELETE request will return `204`status code.
+
+Error messages will use `4xx` status codes and will provide a description of the error.
+
+    HTTP Status Code: 403
+    {"message":"Param Update Forbidden","code": 20003}
+
+## Pagination
+All GET requests on collection of objects can use pagination. You can add `page` and `count` parameters to the query string to retrieve specific content using the pager. For example:
+> /category/genre/movie?page=2&count=10
+
+Collection resources results always embed pager data about the current request:
+
+    "page": 1,          # current page
+    "per_page": 5,      # number of item by page
+    "last_page": 4,     # last page with items
+    "total": 20,        # total number of items
+
+## Caching
+API is compatible with Entity Tag `ETAG` and the request header `If-Modified-Since`
+
+## Filtering collection results
+TODO
+
+## Sorting
+The parameter `orderBy` can be used to describe sorting rules on services that return collections of objects. It must be used as a key/value array, with the sorting field as the key and the sorting order as the value.
+
+The following example get a list of programs sorted by creation date, the newest the first:
+
+    GET /programs?orderBy[created_at]=DESC
 
 
 # Group Channel
