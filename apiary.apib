@@ -25,6 +25,9 @@ Provides the editorial data
 ## Date
 All dates are represented by [ISO_8601](http://en.wikipedia.org/wiki/ISO_8601)
 
+## Country
+All countries are represented by [ISO_3166-1](http://www.iso.org/iso/country_codes.htm)
+
 ## Authentication
 Currently the API provides only a basic http authentication. Please refer to the config file of the Data API to retrieve a valid account.
 
@@ -58,7 +61,6 @@ HTTP Status Code: 403
 {"message":"Param Update Forbidden","code": 20003}
 ```
 
-
 ## Caching
 API is compatible with Entity Tag `ETAG` and the request header `If-Modified-Since`
 
@@ -70,7 +72,7 @@ Here are the parameters you'll retrieve in a paginated response:
 
 | Properties                            | Links                         | Embedded relations                    |
 |---------------------------------------|-------------------------------|---------------------------------------|
-| *page*: The current page of the pager | *self*: Current pager         | *results*: List of items in the pager |
+| *page*: The current page of the pager | *self*: Current pager         | *data*: List of items in the pager |
 | *limit*: Number of elements per page  | *prev*: Previous page         |                                       |
 | *pages*: Total number of pages        | *next*: Next page             |                                       |
 | *total*: Total number of elements     | *first*: First page of pager  |                                       |
@@ -91,7 +93,18 @@ The following example get a list of programs sorted by creation date, the newest
 
     GET ?orderBy[created_at]=DESC
 
+## Search
+Collection ressources provide two search methods.
 
+If you use JSONP, you can use `callback` parameter
+
+### Full Text
+
+Use `q` parameter to make a full text search on collection ressource
+
+### Autocompletion
+
+Use `complete`parameter to make an autocomplete search on collection ressource
 
 # Group Channel
 
@@ -172,7 +185,7 @@ endDate      | No   | Only use for ephemere channel like `Pere Noel Channel` or 
 
 
 ### Update a Channel [PUT]
-**WAIT**
+**Not Needed on MVP**
 Update a channel object.
 
 
@@ -208,6 +221,7 @@ Update a channel object.
 
 
 # Group Partner
+**Not Needed on MVP**
 
 Provide partner identity information
 
@@ -288,7 +302,7 @@ Return the genre object and sub collection
 
 # Group Jobs
 
-**WAIT**
+**Not Needed on MVP**
 Provide jobs information
 
 ## List [/api/jobs/]
@@ -347,7 +361,7 @@ A tag is used to define a common characteristic. We provide 4 types of tags :
 ## Tags type collection [/api/tags]
 
 
-### Retrieve latest reviews [GET]
+### Retrieve tags type collection [GET]
 + Response 200 (application/json)
         
         {
@@ -375,7 +389,7 @@ A tag is used to define a common characteristic. We provide 4 types of tags :
 
 Return the list of tags for the given type.
 
-### Retrieve latest reviews [GET]
+### Retrieve tags collection [GET]
 + Response 200 (application/json)
 
         {
@@ -456,7 +470,7 @@ format      | yes   | content-type
 
 Return the list of media. 
 
-### Retrieve media list [GET]
+### Retrieve media collection [GET]
 + Response 200 (application/json)
 
         {
@@ -493,8 +507,6 @@ Return the list of media.
         }
 
 ### Add media [POST]
-
-
 
 + Request (application/json)
 
@@ -550,11 +562,11 @@ Upload media content file
 
 Requirements : 
 - Maximum upload file size : 20 Mb
-- Accepted media MIME types: 
+- Accepted media MIME types: `image/jpeg` `image/png` `image/webp `
 
 The HTTP headers to use when making a simple upload request include:
-- Content-Type. Set to one of the method's accepted upload media data types, specified in the API reference.
-- Content-Length. Set to the number of bytes you are uploading.
+- `Content-Type` : Set to one of the method's accepted upload media data types, specified in the API reference.
+- `Content-Length` : Set to the number of bytes you are uploading.
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the media.
@@ -587,7 +599,6 @@ For collections the rule is stored in the `data` field.
 
 ### Retrieve content collection [GET]
 
-This method allow users to search collection 
 
 + Response 200 (application/json)
         
@@ -866,6 +877,7 @@ Attach the given mediaId to the current content
 
 
 ## Members [/api/contents/{id}/members]
+**Not Needed on MVP**
 
 + Parameters
   + id (required, number, `1`) ... Numeric `id` of the content.
@@ -913,7 +925,8 @@ Attach the given mediaId to the current content
         ]
 
 ## Reviews [/api/contents/{id}/reviews]
-**WAIT**
+
+**Not needed in MVP**
 
 + Parameters
   + id (required, number, `1`) ... Numeric `id` of the content.
@@ -973,9 +986,28 @@ Attach the given mediaId to the current content
 
 ## Tags link [/api/contents/{id}/tags/{tagsId}]
 
+
++ Parameters
+  + id (required, number, `1`) ... Numeric `id` of the content.
+  + tagsId (required, number, `12752996`) ... Numeric `id` of the media.
+
+### Attach a tag [PUT]
+
+Attach the given tagId to the current content
+
++ Response 201 (application/json)
+
+
+### dettach a media [DELETE]
+
+Attach the given tagId to the current content
+
++ Response 204 (application/json)
+
+
 ## Awards [/api/contents/{id}/awards]
 
-**WAIT**
+**Not needed in MVP**
 
 + Parameters
   + id (required, number, `1`) ... Numeric `id` of the content.
@@ -1005,6 +1037,8 @@ Attach the given mediaId to the current content
           ]
 
 ## See also [/api/contents/{id}/seealso]
+**Not needed in MVP**
+
 Return the list of the "See Also" programs attached to the given id
 
 + Parameters
@@ -1057,7 +1091,7 @@ To retrieve the overload content use the `/api/overloads/`
 + Parameters
     + id (required, number, `2798845`) ... Numeric `id` of the Content to perform action with.
 
-### Retrieve a content see also [GET]
+### Retrieve a overload [GET]
 + Response 200 (application/json)
 
         [
@@ -1114,10 +1148,10 @@ Delete an overload for the content.
 
 + Response 200 (application/json)
 
-+ Response 404 (application/json)
 
 
 # Group Events
+**Not needed in MVP**
 
 ## Events [/api/events]
 
