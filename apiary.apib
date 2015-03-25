@@ -43,7 +43,7 @@ The common [HTTP Response Status Codes](https://github.com/for-GET/know-your-htt
 
 Successful GET and PUT request will return `200` status code.
 
-Successful POST request will return `201` status code.
+Successful POST request will return `201` status code, with a header `Location` to the new ressource
 
 Successful DELETE request will return `204`status code.
 
@@ -230,9 +230,9 @@ Provide partner identity information
 
 Provide genre classification
 
-## Genre list [/api/genres/]
+## Genre collection [/api/genres/]
 
-Return the list of genre.
+Return the collection of genre.
 
 ### Retrieve genres list [GET]
 + Response 200 (application/json)
@@ -254,7 +254,7 @@ Return the list of genre.
 
 ## Sub-Genre list [/api/genres/{id}/]
 
-Return the sub genre of the given id
+Return the genre object and sub collection
 
 + Parameters
   + id (required, number, `1`) ... Numeric `id` of the genre.
@@ -262,25 +262,33 @@ Return the sub genre of the given id
 ### Retrieve sub genre list [GET]
 + Response 200 (application/json)
 
-        [
-          {
+        {
             "id": "1",
-            "name": "Film Action",
+            "name": "Cinéma",
             "rank": "1",
-            "filter": "FILM ACTION-AVENTURE",
             "updateDate": "2015-01-19T20:18:12.000+0100"
-          },
-          {
-            "id": "2",
-            "name": "Film Aventure",
-            "rank": "3",
-            "filter": "FILM ACTION-AVENTURE",
-            "updateDate": "2015-01-19T20:18:12.000+0100"
-          }
-        ]
+            "subcollection": [
+                  {
+                    "id": "1",
+                    "name": "Film Action",
+                    "rank": "1",
+                    "filter": "FILM ACTION-AVENTURE",
+                    "updateDate": "2015-01-19T20:18:12.000+0100"
+                  },
+                  {
+                    "id": "2",
+                    "name": "Film Aventure",
+                    "rank": "3",
+                    "filter": "FILM ACTION-AVENTURE",
+                    "updateDate": "2015-01-19T20:18:12.000+0100"
+                  }
+                ]
+        },
+        
 
 # Group Jobs
 
+**WAIT**
 Provide jobs information
 
 ## List [/api/jobs/]
@@ -336,12 +344,9 @@ A tag is used to define a common characteristic. We provide 4 types of tags :
 - MOTCLE
 - TAG
 
-## Type list [/api/tags/?limit={limit}&page={page}]
+## Tags type collection [/api/tags]
 
-+ Parameters
-    + limit (optional, number, `10`) ... The number of elements retuned limit
-    + page (optional, number, `2`) ... The page to be returned
-    
+
 ### Retrieve latest reviews [GET]
 + Response 200 (application/json)
         
@@ -362,15 +367,11 @@ A tag is used to define a common characteristic. We provide 4 types of tags :
             {
               "type": "TAG"
             }
-          ],
-          "paging": {
-            "previous": null,
-            "next": "/api/tags?page=2"
-          }
+          ]
         }
 
 
-## Tags [/api/tags/{type}]
+## Tags Collection [/api/tags/{type}]
 
 Return the list of tags for the given type.
 
@@ -393,11 +394,27 @@ Return the list of tags for the given type.
           }
         }
 
-## Tags [/api/tags/{type}/{tagId}]
+### Create tag [POST]
+
+Create a new tag. Only for `EDUCATION` and `MOTCLE`
+
++ Request (application/json)
+
+        {
+          "label": "Cinéma"
+        }
+
++ Response 201 (application/json)
+
+  + Headers
+
+            Location: /api/tags/EDUCATION/69
+
+## Tag ressource [/api/tags/{type}/{tagId}]
 
 Return the specified tag
 
-### Retrieve latest reviews [GET]
+### Retrieve tag [GET]
 + Response 200 (application/json)
 
         {
@@ -405,17 +422,16 @@ Return the specified tag
           "label": "Cinéma"
         }
         
-### Retrieve latest reviews [DELETE]
+### Delete tag [DELETE]
 
-Delete a tag. Deletion are authorized only for EDUCATION and MOTCLE 
+Delete a tag. Deletion are authorized only for `EDUCATION` and `MOTCLE`
 
-+ Response 200 (application/json)
++ Response 204 (application/json)
 
-+ Response 403 (application/json)
 
-### Retrieve latest reviews [PUT]
+### Update tag [PUT]
 
-Add a new tag. Only for EDUCATION and MOTCLE.
+Update a new tag. Only for `EDUCATION` and `MOTCLE`
 
 + Request (application/json)
 
@@ -429,15 +445,16 @@ Add a new tag. Only for EDUCATION and MOTCLE.
 
             Location: /api/tags/EDUCATION/69
 
-+ Response 400 (application/json)
-
-
-
 # Group Media
+Property | Required | Description
+-------------- | ----------- | -----------
+imageType      | yes | TODO STD ?
+format      | yes   | content-type
+
 
 ## Media [/api/media]
 
-Return the list of events. An event could be a music festival, academy awards, ...
+Return the list of media. 
 
 ### Retrieve media list [GET]
 + Response 200 (application/json)
@@ -454,7 +471,7 @@ Return the list of events. An event could be a music festival, academy awards, .
               "rank": 1,
               "id": 191281,
               "updateDate": "2012-09-10T21:44:25.000+0000",
-              "path": "plmphoto:/STD/14876/STD_298296.jpg"
+              "path": "http://<plmphoto>/STD/14876/STD_298296.jpg"
             },
             {
               "type": "IMAGE",
@@ -466,7 +483,7 @@ Return the list of events. An event could be a music festival, academy awards, .
               "rank": 1,
               "id": 191281,
               "updateDate": "2012-09-10T21:44:25.000+0000",
-              "path": "plmphoto:/STD/14876/STD_298296.jpg"
+              "path": "http://<plmphoto>/STD/14876/STD_298296.jpg"
             }
           ],
           "paging": {
@@ -481,15 +498,9 @@ Return the list of events. An event could be a music festival, academy awards, .
 
         {
           "type": "IMAGE",
-          "height": 272,
-          "width": 352,
           "format": "image/jpeg",
           "name": "STD_298296.jpg",
           "imgType": "STD",
-          "rank": 1,
-          "id": 191281,
-          "updateDate": "2012-09-10T21:44:25.000+0000",
-          "path": "plmphoto:/STD/14876/STD_298296.jpg"
         }
 
 + Response 200 (application/json)
@@ -500,7 +511,6 @@ Return the list of events. An event could be a music festival, academy awards, .
 
 ## Media [/api/media/{id}]
 
-Bring media update capacities
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the media.
@@ -520,23 +530,33 @@ Bring media update capacities
           "rank": 1,
           "id": 191281,
           "updateDate": "2012-09-10T21:44:25.000+0000",
-          "path": "plmphoto:/STD/14876/STD_298296.jpg"
+          "path": "http://<plmphoto>/STD/14876/STD_298296.jpg"
         }
         
 ### Delete media [DELETE]
 
-+ Response 200 (application/json)
++ Response 204 (application/json)
 
-+ Response 404 (application/json)
+
 
 ## Media file [/api/media/{id}/file]
 
 Upload media content file
 
+Requirements : 
+- Maximum upload file size : 20 Mb
+- Accepted media MIME types: 
+
+The HTTP headers to use when making a simple upload request include:
+- Content-Type. Set to one of the method's accepted upload media data types, specified in the API reference.
+- Content-Length. Set to the number of bytes you are uploading.
+
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the media.
 
+
 ### Upload media file [PUT]
+
 
 + Response 201 (application/json)
 
@@ -557,15 +577,25 @@ A content is any movie, brand, season that can be referenced in the BDDPe. Infor
 
 For collections the rule is stored in the `data` field.
 
+
 ## Content [/api/contents/]
 
-### Create a collection [POST]
+
+### Retrieve content collection [GET]
+
+This method allow users to search collection 
+
++ Response 200 (application/json)
+        
+        TODO
+
+### Create a content [POST]
 
 This method allow users to create collection.
 
 + Request (application/json)
 
-        {Upad
+        {
           "objectType": "LIST",
           "contentType": "AUTRE",
           "titles": {
@@ -682,7 +712,7 @@ This method allow users to create collection.
           "diffusionDate": "2012-10-05T18:55:00.000+0000",
         }
 
-### Update content summary [PUT]
+### Update content summary and rules [PUT]
 
 This method allow users to update a content summary. Only these field are updatable
 
@@ -711,7 +741,7 @@ Collections rules could be also updated using this method.
 
 This method allow users to delete a content. Only collection are deletable.
 
-+ Response 200 (application/json)
++ Response 204 (application/json)
 
 
 ## Media [/api/contents/{id}/media]
@@ -733,7 +763,7 @@ This method allow users to delete a content. Only collection are deletable.
               "rank": 1,
               "id": 191281,
               "updateDate": "2012-09-10T21:44:25.000+0000",
-              "path": "plmphoto:/STD/14876/STD_298296.jpg"
+              "path": "http://<plmphoto>/STD/14876/STD_298296.jpg"
             },
             {
               "type": "IMAGE",
@@ -745,7 +775,7 @@ This method allow users to delete a content. Only collection are deletable.
               "rank": 1,
               "id": 191284,
               "updateDate": "2013-09-23T12:07:47.000+0000",
-              "path": "plmphoto:/169/14876/169_298296.jpg"
+              "path": "http://<plmphoto>/169/14876/169_298296.jpg"
             },
             {
               "type": "IMAGE",
@@ -757,7 +787,7 @@ This method allow users to delete a content. Only collection are deletable.
               "rank": 1,
               "id": 291889,
               "updateDate": "2012-10-05T17:33:41.000+0000",
-              "path": "atgphoto:/804/jpg/ANT_1075478_1_804.jpg"
+              "path": "http://<atgphoto>/804/jpg/ANT_1075478_1_804.jpg"
             },
             {
               "type": "IMAGE",
@@ -769,7 +799,7 @@ This method allow users to delete a content. Only collection are deletable.
               "rank": 1,
               "id": 291893,
               "updateDate": "2012-10-05T17:33:41.000+0000",
-              "path": "atgphoto:/412/jpg/ANT_1075478_1_412.jpg"
+              "path": "http://<atgphoto>/412/jpg/ANT_1075478_1_412.jpg"
             },
             {
               "type": "IMAGE",
@@ -781,7 +811,7 @@ This method allow users to delete a content. Only collection are deletable.
               "rank": 1,
               "id": 12652568,
               "updateDate": "2014-09-26T18:13:43.000+0000",
-              "path": "plmphoto:/QT/MEA_28153194_298288.jpg"
+              "path": "http://<plmphoto>/QT/MEA_28153194_298288.jpg"
             },
             {
               "type": "IMAGE",
@@ -793,7 +823,7 @@ This method allow users to delete a content. Only collection are deletable.
               "rank": 1,
               "id": 12652568,
               "updateDate": "2014-09-26T18:13:43.000+0000",
-              "path": "plmphoto:/QT/MEA_28153194_298288.jpg"
+              "path": "http://<plmphoto>/QT/MEA_28153194_298288.jpg"
             },
             {
               "type": "IMAGE",
@@ -805,7 +835,7 @@ This method allow users to delete a content. Only collection are deletable.
               "rank": 1,
               "id": 12752996,
               "updateDate": "2014-09-29T12:19:57.000+0000",
-              "path": "plmphoto:/MWB/05_10_theartiste.jpg"
+              "path": "http://<plmphoto>/MWB/05_10_theartiste.jpg"
             }
           ]
           
@@ -819,20 +849,17 @@ This method allow users to delete a content. Only collection are deletable.
 
 Attach the given mediaId to the current content
 
-+ Request (application/json)
-
-        353535
 
 + Response 201 (application/json)
 
-+ Response 400 (application/json)
++ Response 404 (application/json)
 
 
 ### dettach a media [DELETE]
 
 Attach the given mediaId to the current content
 
-+ Response 200 (application/json)
++ Response 201 (application/json)
 
 + Response 404 (application/json)
 
