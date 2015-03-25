@@ -1,46 +1,1159 @@
 FORMAT: 1A
 
-# hapiterapy
-Notes API is a *short texts saving* service similar to its physical paper presence on your table.
+# BDDPe
+Provides the editorial data
 
-# Group Notes
-Notes related resources of the **Notes API**
+- TODO : provide search and filtering and pagination in lists
+- TODO : REST filtering
+-       OK TODO : Channel list API
+- TODO : bad request in case of invalid input
+- TODO : /contents/id PUT : creation de contenu
+- TODO : /contents/id/?full=true . Kill summary
+-       OK TODO : media sans "s"
+-       OK TODO : /contents/id/overloads
+- TODO : url path media : remove and add url instead
+- TODO : sub genre a ajouter dans le genre avec un attribut
+-       OK TODO : /api/events/ pour festivals
+- TODO : add jobs in member list
+- TODO : members changer order en rank
+- TODO : Festival mettre le code ISO
+-       OK TODO : Ajouter /api/media/id/file POST
+-       OK TODO : Tags : /api/tags POST PUT
+- TODO : Subchild /api/content/id/subobject
 
-## Notes Collection [/notes]
-### List all Notes [GET]
+
+# Group Channel
+
+## Channel list [/api/channels/]
+
+Retrieve channel list
+
+### Channel list [GET]
 + Response 200 (application/json)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
+        {
+          "data": [
+            {
+              "id": "56379",
+              "name": "CINE+ HD",
+              "definition": "HD",
+              "beginDate": "2013-12-14T00:00:00.000+0100",
+              "endDate": "2016-12-14T00:00:00.000+0100",
+              "creationDate": "2013-10-14T00:00:00.000+0100",
+              "lastUpdate": "2013-10-14T00:00:00.000+0100",
+              "related": {
+                "sd": "56377",
+                "master": "56378"
+              }
+            },
+            {
+              "id": "56379",
+              "name": "CINE+ HD",
+              "definition": "HD",
+              "beginDate": "2013-12-14T00:00:00.000+0100",
+              "endDate": "2016-12-14T00:00:00.000+0100",
+              "creationDate": "2013-10-14T00:00:00.000+0100",
+              "lastUpdate": "2013-10-14T00:00:00.000+0100",
+              "related": {
+                "sd": "56377",
+                "master": "56378"
+              }
+            }
+          ],
+          "paging": {
+            "previous": null,
+            "next": "/api/channels/?page=2"
+          }
+        }
 
-### Create a Note [POST]
+## Channel [/api/channels/{id}]
+
+When `id` is given, the operation target a single channel corresponding to this id.
++ Parameters
+  + id (required, number, `56379`) ... Numeric `id` of the channel.
+
+
+### Retrieve a channel [GET]
+Return a single channel object
+
++ Response 200 (application/json)
+
+
+        {
+            "id": "56379",
+            "name": "CINE+ HD",
+            "definition": "HD",
+            "beginDate": "2013-12-14T00:00:00.000+0100";
+            "endDate": "2016-12-14T00:00:00.000+0100",
+            "creationDate": "2013-10-14T00:00:00.000+0100",
+            "lastUpdate": "2013-10-14T00:00:00.000+0100",
+            "related" : {
+                "sd": "56377",
+                "master": "56378"
+            }
+        }
+
++ response 204 (application/json)
+
+### Update a Channel [PUT]
+
+Update or create a channel object.
+
+
 + Request (application/json)
 
-        { "title": "Buy cheese and bread for breakfast." }
+
+        {
+            "id": "56379",
+            "name": "CINE+ HD",
+            "definition": "HD",
+            "beginDate": "2013-12-14T00:00:00.000+0100";
+            "endDate": "2016-12-14T00:00:00.000+0100",
+            "creationDate": "2013-10-14T00:00:00.000+0100",
+            "lastUpdate": "2014-12-14T00:00:00.000+0100",
+            "master": "56890"
+        }
+
++ Response 200 (application/json)
 
 + Response 201 (application/json)
 
-        { "id": 3, "title": "Buy cheese and bread for breakfast." }
 
-## Note [/notes/{id}]
-A single Note object with all its details
+# Group Partner
+
+Provide partner identity information
+
+## Partner [/api/partners/{id}]
 
 + Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Note to perform action with. Has example value.
+  + id (required, number, `1`) ... Numeric `id` of the partner.
 
-### Retrieve a Note [GET]
+### Retrieve a partner [GET]
 + Response 200 (application/json)
 
-    + Header
+        {
+          "id" : "1",
+          "name" : "CANAL+",
+          "enabled" : true,
+          "updateDate" : "2015-01-19T20:18:12.000+0100"
+        }
 
-            X-My-Header: The Value
+# Group Genre
 
-    + Body
+Provide genre classification
 
-            { "id": 2, "title": "Pick-up posters from post-office" }
+## Genre list [/api/genres/]
 
-### Remove a Note [DELETE]
-+ Response 204
+Return the list of genre.
+
+### Retrieve genres list [GET]
++ Response 200 (application/json)
+
+        [
+          {
+            "id": "1",
+            "name": "Cinéma",
+            "rank": "1",
+            "updateDate": "2015-01-19T20:18:12.000+0100"
+          },
+          {
+            "id": "2",
+            "name": "Sport",
+            "rank": "3",
+            "updateDate": "2015-01-19T20:18:12.000+0100"
+          }
+        ]
+
+## Sub-Genre list [/api/genres/{id}/]
+
+Return the sub genre of the given id
+
++ Parameters
+  + id (required, number, `1`) ... Numeric `id` of the genre.
+
+### Retrieve sub genre list [GET]
++ Response 200 (application/json)
+
+        [
+          {
+            "id": "1",
+            "name": "Film Action",
+            "rank": "1",
+            "filter": "FILM ACTION-AVENTURE",
+            "updateDate": "2015-01-19T20:18:12.000+0100"
+          },
+          {
+            "id": "2",
+            "name": "Film Aventure",
+            "rank": "3",
+            "filter": "FILM ACTION-AVENTURE",
+            "updateDate": "2015-01-19T20:18:12.000+0100"
+          }
+        ]
+
+# Group Jobs
+
+Provide jobs information
+
+## List [/api/jobs/]
+
+Return the list of jobs.
+
+### Retrieve jobs list [GET]
++ Response 200 (application/json)
+
+        [
+          {
+            "id": "1",
+            "name": "Invité",
+            "rank": "10",
+            "prefix": "Invités : ",
+            "updateDate": "2015-01-19T20:18:12.000+0100"
+          },
+          {
+            "id": "2",
+            "name": "Acteur",
+            "rank": "12",
+            "prefix": "Avec : ",
+            "updateDate": "2015-01-19T20:18:12.000+0100"
+          }
+        ]
+
+## Job [/api/jobs/{id}]
+
+Return specified job.
+
++ Parameters
+  + id (required, number, `1`) ... Numeric `id` of the job.
+
+
+### Retrieve a job from its id [GET]
++ Response 200 (application/json)
+
+          {
+            "id": "1",
+            "name": "Invité",
+            "rank": "10",
+            "prefix": "Invités : ",
+            "updateDate": "2015-01-19T20:18:12.000+0100"
+          }
+
+# Group Tags
+
+A tag is used to define a common characteristic. We provide 4 types of tags :
+
+- GENRE_CANAL
+- SOUS_GENRE_CANAL
+- EDUCTION
+- MOTCLE
+- TAG
+
+## Type list [/api/tags/?limit={limit}&page={page}]
+
++ Parameters
+    + limit (optional, number, `10`) ... The number of elements retuned limit
+    + page (optional, number, `2`) ... The page to be returned
+    
+### Retrieve latest reviews [GET]
++ Response 200 (application/json)
+        
+        {
+          "data": [
+            {
+              "type": "GENRE_CANAL"
+            },
+            {
+              "type": "SOUS_GENRE_CANAL"
+            },
+            {
+              "type": "EDUCATION"
+            },
+            {
+              "type": "MOTCLE"
+            },
+            {
+              "type": "TAG"
+            }
+          ],
+          "paging": {
+            "previous": null,
+            "next": "/api/tags?page=2"
+          }
+        }
+
+
+## Tags [/api/tags/{type}]
+
+Return the list of tags for the given type.
+
+### Retrieve latest reviews [GET]
++ Response 200 (application/json)
+
+        {
+          "data": [
+            {
+              "id": 1,
+              "label": "Cinéma"
+            },
+            {
+              "id": 2,
+              "label": "Documentaire"
+            }
+          ],
+          "paging": {
+            "next": "/api/tags/GENRE?page=2"
+          }
+        }
+
+## Tags [/api/tags/{type}/{tagId}]
+
+Return the specified tag
+
+### Retrieve latest reviews [GET]
++ Response 200 (application/json)
+
+        {
+          "id": 1,
+          "label": "Cinéma"
+        }
+        
+### Retrieve latest reviews [DELETE]
+
+Delete a tag. Deletion are authorized only for EDUCATION and MOTCLE 
+
++ Response 200 (application/json)
+
++ Response 403 (application/json)
+
+### Retrieve latest reviews [PUT]
+
+Add a new tag. Only for EDUCATION and MOTCLE.
+
++ Request (application/json)
+
+        {
+          "label": "Cinéma"
+        }
+
++ Response 200 (application/json)
+
+  + Headers
+
+            Location: /api/tags/EDUCATION/69
+
++ Response 400 (application/json)
+
+
+
+# Group Media
+
+## Media [/api/media]
+
+Return the list of events. An event could be a music festival, academy awards, ...
+
+### Retrieve media list [GET]
++ Response 200 (application/json)
+
+        {
+          "data": [
+            {
+              "type": "IMAGE",
+              "height": 272,
+              "width": 352,
+              "format": "image/jpeg",
+              "name": "STD_298296.jpg",
+                      "imgType": "STD",
+              "rank": 1,
+              "id": 191281,
+              "updateDate": "2012-09-10T21:44:25.000+0000",
+              "path": "plmphoto:/STD/14876/STD_298296.jpg"
+            },
+            {
+              "type": "IMAGE",
+              "height": 272,
+              "width": 352,
+              "format": "image/jpeg",
+              "name": "STD_298296.jpg",
+              "imgType": "STD",
+              "rank": 1,
+              "id": 191281,
+              "updateDate": "2012-09-10T21:44:25.000+0000",
+              "path": "plmphoto:/STD/14876/STD_298296.jpg"
+            }
+          ],
+          "paging": {
+            "previous": null,
+            "next": "/api/media/?page=2"
+          }
+        }
+
+### Add media [POST]
+
++ Request (application/json)
+
+        {
+          "type": "IMAGE",
+          "height": 272,
+          "width": 352,
+          "format": "image/jpeg",
+          "name": "STD_298296.jpg",
+          "imgType": "STD",
+          "rank": 1,
+          "id": 191281,
+          "updateDate": "2012-09-10T21:44:25.000+0000",
+          "path": "plmphoto:/STD/14876/STD_298296.jpg"
+        }
+
++ Response 200 (application/json)
+
+  + Headers
+
+            Location: /api/media/2
+
+## Media [/api/media/{id}]
+
+Bring media update capacities
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the media.
+
+
+### Retrieve media [GET]
+
++ Response 200 (application/json)
+
+        {
+          "type": "IMAGE",
+          "height": 272,
+          "width": 352,
+          "format": "image/jpeg",
+          "name": "STD_298296.jpg",
+          "imgType": "STD",
+          "rank": 1,
+          "id": 191281,
+          "updateDate": "2012-09-10T21:44:25.000+0000",
+          "path": "plmphoto:/STD/14876/STD_298296.jpg"
+        }
+        
+### Delete media [DELETE]
+
++ Response 200 (application/json)
+
++ Response 404 (application/json)
+
+## Media file [/api/media/{id}/file]
+
+Upload media content file
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the media.
+
+### Upload media file [PUT]
+
++ Response 201 (application/json)
+
++ Response 204 (application/json)
+
+# Group Content
+
+A content is any movie, brand, season that can be referenced in the BDDPe. Information about content could be reach that way :
+
+- `media`, provides attached media information
+- `members`, provides members information
+- `reviews`, provides partner reviews
+- `tags`, provides tags informations
+- `awards`, provides winned awards
+- `seealso`, provides see also information
+- `overloads`, provides attached overloads
+
+For collections the rule is stored in the `data` field.
+
+## Content [/api/contents/]
+
+### Create a collection [POST]
+
+This method allow users to create collection.
+
++ Request (application/json)
+
+        {
+          "objectType": "LIST",
+          "contentType": "AUTRE",
+          "titles": {
+            "epgTitle": "Les bombes des...",
+            "titleDivisible": "Les bombes des séries TV",
+            "subTitleDivisible": "Divertissement"
+          },
+          "synopsis": {},
+          "lang": "fr",
+          "ratingCSA": 4,
+          "duration": "0",
+          "boost": 1,
+          "data": {
+            "itemType": "collection",
+            "id": "COLL_SERIES_BOMBES",
+            "revision": 315529309000,
+            "title": "Les bombes des s??ries TV",
+            "accroche": "Belles et exigeantes, ces femmes nous mettent les sens en ??moi.",
+            "longAccroche": "Belles et exigeantes, ces femmes nous mettent les sens en ??moi.",
+            "creationDate": "2013-12-26",
+            "ratingCSA": 4,
+            "idKey": "mvs_cat_2114",
+            "tags": [
+              {
+                "type": "CLASSIFICATION",
+                "name": "Playlists de s??ries",
+                "displayName": "/Canalplay/Listes CPI/Infinity S??ries/Playlists de s??ries",
+                "idKey": "Inf_Series_Collections"
+              }
+            ],
+            "maxResult": 2000,
+            "defaultSorts": [
+              {
+                "itemType": "sortElement",
+                "id": "seBoostDesc",
+                "displayTitle": "Boost desc",
+                "sortKey": "boost",
+                "sortOrder": "desc",
+                "displayName": "Boost desc"
+              },
+              {
+                "itemType": "sortElement",
+                "id": "seDiffDateDesc",
+                "displayTitle": "Date de diffusion desc",
+                "sortKey": "diffusionDate",
+                "sortOrder": "desc",
+                "displayName": "Date de diffusion desc"
+              }
+            ],
+            "rules": [
+              {
+                "id": "5800002",
+                "itemType": "manualRule",
+                "maxResult": 2000,
+                "contents": [
+                  "serie_cat113750364",
+                  "serie_cat112930006",
+                  "serie_cat110710161",
+                  "serie_cat109220219",
+                  "serie_cat113750413",
+                  "serie_cat109770233",
+                  "serie_cat109220236",
+                  "serie_cat113450035",
+                  "serie_cat109860021",
+                  "serie_cat110710026",
+                  "serie_cat113210034",
+                  "serie_cat109220162"
+                ]
+              }
+            ]
+          }
+        }
+
++ Response 200 (application/json)
+
+  + Headers
+
+            Location: /api/contents/99999999/summary
+
+## Content [/api/contents/{id}]
+
++ Parameters
+  + id (required, number, `1`) ... Numeric `id` of the content.
+
+### Retrieve content summary [GET]
++ Response 200 (application/json)
+
+        {
+          "objectType": "UNIT",
+          "contentType": "FILM",
+          "itemType": "movie",
+          "titles": {
+            "originalTitle": "The Artist",
+            "epgTitle": "The Artist",
+            "titleDivisible": "The Artist",
+            "subTitleDivisible": "Film Comédie dramatique"
+          },
+          "synopsis": {
+            "small": "En 1927, un acteur, vedette du cinéma muet, sombre dans l'oubli avec l'arrivée du parlant et assiste à l'ascension irrésistible d'une ancienne figurante.",
+            "medium": "A Hollywood, en 1927, George Valentin compte parmi les plus grandes vedettes du cinéma muet, mais l'irruption du parlant va mettre un terme brutal à sa carrière. L'acteur ne tourne plus et sombre dans l'oubli. A l'inverse, Peppy Miller, une jeune figurante, devient la nouvelle étoile de Hollywood...",
+            "large": "A Hollywood, en 1927, George Valentin compte parmi les plus grandes vedettes du cinéma, et sa célébrité n'a d'égal que son orgueil. Son producteur, Al Zimmer, l'invite à la projection de son dernier film, à la sortie duquel il croise Peppy Miller, une comédienne débutante. La jeune femme devient figurante dans un long métrage en tournage aux côtés de George. Les deux acteurs se plaisent aussitôt, mais George refuse de s'engager. C'est alors que le parlant fait son apparition. George, persuadé que cette technologie est sans avenir, va jusqu'à se séparer d'Al pour produire un film muet. Parallèlement, Peppy devient la nouvelle égérie du studio..."
+          },
+          "color": "0",
+          "productionNationality": "France - Belgique",
+          "productionYear": "2011",
+          "updateDate": "2014-12-08T20:12:08.000+0000",
+          "id": 585877,
+          "num": 1,
+          "lang": "fr",
+          "version": "20141208201208",
+          "ratingCSA": 1,
+          "duration": "100",
+          "boost": 32715,
+          "diffusionDate": "2012-10-05T18:55:00.000+0000",
+        }
+
+### Update content summary [PUT]
+
+This method allow users to update a content summary. Only these field are updatable
+
+Collections rules could be also updated using this method.
+
++ Request (application/json)
+
+        {
+          "titles": {
+            "originalTitle": "The Artist",
+            "epgTitle": "The Artist",
+            "titleDivisible": "The Artist",
+            "subTitleDivisible": "Film Comédie dramatique"
+          },
+          "synopsis": {
+            "small": "En 1927, un acteur, vedette du cinéma muet, sombre dans l'oubli avec l'arrivée du parlant et assiste à l'ascension irrésistible d'une ancienne figurante.",
+            "medium": "A Hollywood, en 1927, George Valentin compte parmi les plus grandes vedettes du cinéma muet, mais l'irruption du parlant va mettre un terme brutal à sa carrière. L'acteur ne tourne plus et sombre dans l'oubli. A l'inverse, Peppy Miller, une jeune figurante, devient la nouvelle étoile de Hollywood...",
+            "large": "A Hollywood, en 1927, George Valentin compte parmi les plus grandes vedettes du cinéma, et sa célébrité n'a d'égal que son orgueil. Son producteur, Al Zimmer, l'invite à la projection de son dernier film, à la sortie duquel il croise Peppy Miller, une comédienne débutante. La jeune femme devient figurante dans un long métrage en tournage aux côtés de George. Les deux acteurs se plaisent aussitôt, mais George refuse de s'engager. C'est alors que le parlant fait son apparition. George, persuadé que cette technologie est sans avenir, va jusqu'à se séparer d'Al pour produire un film muet. Parallèlement, Peppy devient la nouvelle égérie du studio..."
+          },
+        }
+
++ Response 204 (application/json)
+
+
+### Delete a content [DELETE]
+
+This method allow users to delete a content. Only collection are deletable.
+
++ Response 200 (application/json)
+
+
+## Media [/api/contents/{id}/media]
+
++ Parameters
+  + id (required, number, `1`) ... Numeric `id` of the content.
+
+### Retrieve content media [GET]
++ Response 200 (application/json)
+
+        [
+            {
+              "type": "IMAGE",
+              "height": 272,
+              "width": 352,
+              "format": "image/jpeg",
+              "name": "STD_298296.jpg",
+              "imgType": "STD",
+              "rank": 1,
+              "id": 191281,
+              "updateDate": "2012-09-10T21:44:25.000+0000",
+              "path": "plmphoto:/STD/14876/STD_298296.jpg"
+            },
+            {
+              "type": "IMAGE",
+              "height": 394,
+              "width": 700,
+              "format": "image/jpeg",
+              "name": "169_298296.jpg",
+              "imgType": "STD169",
+              "rank": 1,
+              "id": 191284,
+              "updateDate": "2013-09-23T12:07:47.000+0000",
+              "path": "plmphoto:/169/14876/169_298296.jpg"
+            },
+            {
+              "type": "IMAGE",
+              "height": 600,
+              "width": 800,
+              "format": "image/jpeg",
+              "name": "ANT_1075478_1_804.jpg",
+              "imgType": "STD",
+              "rank": 1,
+              "id": 291889,
+              "updateDate": "2012-10-05T17:33:41.000+0000",
+              "path": "atgphoto:/804/jpg/ANT_1075478_1_804.jpg"
+            },
+            {
+              "type": "IMAGE",
+              "height": 576,
+              "width": 1024,
+              "format": "image/jpeg",
+              "name": "ANT_1075478_1_412.jpg",
+              "imgType": "STD169",
+              "rank": 1,
+              "id": 291893,
+              "updateDate": "2012-10-05T17:33:41.000+0000",
+              "path": "atgphoto:/412/jpg/ANT_1075478_1_412.jpg"
+            },
+            {
+              "type": "IMAGE",
+              "height": 426,
+              "width": 964,
+              "format": "image/jpeg",
+              "name": "MEA_28153194_298288.jpg",
+              "imgType": "MEAEUREKA",
+              "rank": 1,
+              "id": 12652568,
+              "updateDate": "2014-09-26T18:13:43.000+0000",
+              "path": "plmphoto:/QT/MEA_28153194_298288.jpg"
+            },
+            {
+              "type": "IMAGE",
+              "height": 426,
+              "width": 964,
+              "format": "image/jpeg",
+              "name": "MEA_28153194_298288.jpg",
+              "imgType": "MEASOIR",
+              "rank": 1,
+              "id": 12652568,
+              "updateDate": "2014-09-26T18:13:43.000+0000",
+              "path": "plmphoto:/QT/MEA_28153194_298288.jpg"
+            },
+            {
+              "type": "IMAGE",
+              "height": 360,
+              "width": 1400,
+              "format": "image/jpeg",
+              "name": "05_10_theartiste.jpg",
+              "imgType": "CARWEB",
+              "rank": 1,
+              "id": 12752996,
+              "updateDate": "2014-09-29T12:19:57.000+0000",
+              "path": "plmphoto:/MWB/05_10_theartiste.jpg"
+            }
+          ]
+          
+## Media link [/api/contents/{id}/media/{mediaId}]
+
++ Parameters
+  + id (required, number, `1`) ... Numeric `id` of the content.
+  + mediaId (required, number, `12752996`) ... Numeric `id` of the media.
+
+### Attach a media [PUT]
+
+Attach the given mediaId to the current content
+
++ Request (application/json)
+
+        353535
+
++ Response 201 (application/json)
+
++ Response 400 (application/json)
+
+
+### dettach a media [DELETE]
+
+Attach the given mediaId to the current content
+
++ Response 200 (application/json)
+
++ Response 404 (application/json)
+
+
+
+## Members [/api/contents/{id}/members]
+
++ Parameters
+  + id (required, number, `1`) ... Numeric `id` of the content.
+
+### Retrieve content members [GET]
++ Response 200 (application/json)
+
+        [
+          {
+            "lastName": "Dujardin",
+            "firstName": "Jean",
+            "rank": 1,
+            "id": 1477,
+            "role": "George Valentin",
+            "awards": [
+              {
+                "festivalId": 10,
+                "festivalName": "Oscars",
+                "festivalCountry": "Etats-Unis",
+                "year": 2012,
+                "awardId": 11,
+                "awardName": "Oscar du meilleur acteur",
+                "order": 11
+              }
+            ]
+          },
+          {
+            "lastName": "Bejo",
+            "firstName": "Bérénice",
+            "rank": 2,
+            "id": 1622,
+            "role": "Peppy Miller",
+            "awards": [
+              {
+                "festivalId": 7,
+                "festivalName": "César",
+                "festivalCountry": "France",
+                "year": 2012,
+                "awardId": 12,
+                "awardName": "César de la meilleur actrice",
+                "order": 12
+              }
+            ]
+          }
+        ]
+
+## Reviews [/api/contents/{id}/reviews]
+
++ Parameters
+  + id (required, number, `1`) ... Numeric `id` of the content.
+
+### Retrieve content reviews [GET]
++ Response 200 (application/json)
+
+        [
+          {
+            "name": "Télécâble Sat",
+            "id": 26,
+            "opinions": [
+              {
+                "type": "NOTE_ETOILE",
+                "rating": 4,
+                "name": "Critique",
+                "recommended": true,
+                "opinion": "Un film muet, en noir et blanc, dans la grande tradition du genre : un défi osé, brillamment relevé. Les images sont belles, la musique entraînante, le scénario plein d'humour. Cinq oscars, six César et prix d'interprétation à Cannes pour Jean Dujardin, qui forme un duo formidable avec Bérénice Bejo."
+              }
+            ]
+          },
+          {
+            "name": "Télérama",
+            "id": 25,
+            "opinions": [
+              {
+                "type": "NOTE_TELERAMA",
+                "rating": 2,
+                "name": "Critique",
+                "recommended": true,
+                "opinion": "Le film multiprimé des deux côtés de l'Atlantique, devenu un phénomène ! Michel Hazanavicius rend hommage au septième art, à ses débuts, en noir et blanc et muet. Jean Dujardin, en star déchue, apporte son charme facétieux à cette comédie nostalgique."
+              }
+            ]
+          }
+        ]
+
+## Tags [/api/contents/{id}/tags]
+
++ Parameters
+  + id (required, number, `1`) ... Numeric `id` of the content.
+
+### Retrieve content tags [GET]
++ Response 200 (application/json)
+
+        [
+          {
+            "type": "GENRE_CANAL",
+            "id": 1,
+            "label": "Cinéma"
+          },
+          {
+            "type": "SOUS_GENRE_CANAL",
+            "id": 20,
+            "label": "Film Comédie dramatique"
+          }
+        ]
+
+## Awards [/api/contents/{id}/awards]
+
++ Parameters
+  + id (required, number, `1`) ... Numeric `id` of the content.
+
+### Retrieve content awards [GET]
++ Response 200 (application/json)
+
+        [
+            {
+              "festivalId": 10,
+              "festivalName": "Oscars",
+              "festivalCountry": "Etats-Unis",
+              "year": 2012,
+              "awardId": 2,
+              "awardName": "Oscar du meilleur film",
+              "order": 2
+            },
+            {
+              "festivalId": 7,
+              "festivalName": "César",
+              "festivalCountry": "France",
+              "year": 2012,
+              "awardId": 3,
+              "awardName": "César du meilleur film",
+              "order": 3
+            }
+          ]
+
+## See also [/api/contents/{id}/seealso]
+Return the list of the "See Also" programs attached to the given id
+
++ Parameters
+    + id (required, number, `2798845`) ... Numeric `id` of the Content to perform action with.
+
+### Retrieve a content see also [GET]
++ Response 200 (application/json)
+
+        [
+        2798846,
+        2798847,
+        2798848,
+        2798849
+        ]
+
+
++ response 404 (application/json)
+
+        {
+            "errorCode":"404",
+            "message":"No such resource."
+        }
+
+### Retrieve a content see also [PUT]
+
+Manually attached content. Attached content by this way will precede the computed ones.
+The content will replace the complete existing list if already present.
+The manual list will be available 1 day (To be defined)
+
+When the GET method will be called a merged version will be generated.
+
++ Request (application/json)
+
+        [
+            1,
+            2,
+            3
+        ]
+
++ Response 201 (application/json)
+
++ Response 204 (application/json)
+
+## Overloads [/api/contents/{id}/overloads]
+
+Return the list of the broadcast overloads attached to the given id. The content represent an abstract object. 
+In a broadcast cast we allow user to overload informations. A broadcast is a couple of a provider id and the broadcast id.
+To retrieve the overload content use the `/api/overloads/` 
+
++ Parameters
+    + id (required, number, `2798845`) ... Numeric `id` of the Content to perform action with.
+
+### Retrieve a content see also [GET]
++ Response 200 (application/json)
+
+        [
+            {
+                "providerId": "ATG",
+                "assetId": "serie_cat110340248"
+            },
+            {
+                "providerId": "ATG",
+                "assetId": "serie_cat110340249"
+            }
+        ]
+
+
++ response 204 (application/json)
+
+## Manage overloads [/api/contents/{id}/overloads/{providerId}/{assetId}]
+
++ Parameters
+    + id (required, number, `2798845`) ... Numeric `id` of the Content to perform action with.
+    + providerId (required, string, `ATG`) ... String `providerId` representing the provider.
+    + assetId (required, string, `serie_cat110340249`) ... String `assetId` representing the broadcast id.
+
+
+### Add a new overload fo the given content [PUT]
+
+Add an overload for the content.
+
++ Request (application/json)
+
+        {
+            "providerId": "ATG",
+            "assetId": "serie_cat110340248",
+            "contentId": 4602933,
+            "overload": {
+            "titles": {},
+            "synopsis": {},
+            "lang": "fr",
+            "data": {
+                "itemType": "season",
+                "id": "serie_cat110340248"
+            },
+            "version": "20150306132434",
+            "deleted": false
+        }
+
++ Response 201 (application/json)
+
++ Response 204 (application/json)
+
+### Delete an overload [DELETE]
+
+Delete an overload for the content.
+
++ Response 200 (application/json)
+
++ Response 404 (application/json)
+
+
+# Group Events
+
+## Events [/api/events]
+
+Return the list of events. An event could be a music festival, academy awards, ...
+
+### Retrieve events [GET]
++ Response 200 (application/json)
+
+        {
+          "data": [
+            {
+              "id": 10,
+              "name": "Oscars",
+              "country": "Etats-Unis"
+            },
+            {
+              "id": 7,
+              "name": "César",
+              "country": "France"
+            }
+          ],
+          "paging": {
+            "previous": null,
+            "next": "/api/events/?page=2"
+          }
+        }
+        
+## Events date [/api/events/{eventId}]
+
+Return the list of event occurence date.
+
++ Parameters
+    + eventId (required, number, `1`) ... Numeric `id` of the event.
+
+
+### Retrieve events [GET]
++ Response 200 (application/json)
+
+        {
+          "data": [
+            {
+              "year": 2010
+            },
+            {
+              "year": 2011
+            }
+          ],
+          "paging": {
+            "previous": null,
+            "next": "/api/events/1/?page=2"
+          }
+        }
+        
+        
+## Events rewards [/api/events/{eventId}/{year}/rewards]
+
+Return the list of events. An event could be a music festival, academy awards, ...
+
++ Parameters
+    + eventId (required, number, `1`) ... Numeric `id` of the event.
+    + year (required, number, `2011`) ... Numeric `id` of the year.
+
+
+### Retrieve events [GET]
++ Response 200 (application/json)
+
+        {
+          "data": [
+            {
+                "id": 3,
+                "name": "César du meilleur film",
+            },
+            {
+                "id": 4,
+                "name": "César du meilleur acteur",
+            }
+          ],
+          "paging": {
+            "previous": null,
+            "next": "/api/events/1/2012?page=2"
+          }
+        }        
+
+## Rewarded contents [/api/events/{eventId}/{year}/rewards/{rewardId}]
+
+Return the list of events. An event could be a music festival, academy awards, ...
+
++ Parameters
+    + eventId (required, number, `1`) ... Numeric `id` of the event.
+    + year (required, number, `2011`) ... Numeric `id` of the year.
+    + rewardId (required, number, `1`) ... Numeric `id` of the reward.
+
+### Retrieve events [GET]
++ Response 200 (application/json)
+
+         {
+          "data": [
+            {
+              "objectType": "UNIT",
+              "contentType": "FILM",
+              "itemType": "movie",
+              "titles": {
+                "originalTitle": "The Artist",
+                "epgTitle": "The Artist",
+                "titleDivisible": "The Artist",
+                "subTitleDivisible": "Film Comédie dramatique"
+              },
+              "synopsis": {
+                "small": "En 1927, un acteur, vedette du cinéma muet, sombre dans l'oubli avec l'arrivée du parlant et assiste à l'ascension irrésistible d'une ancienne figurante.",
+                "medium": "A Hollywood, en 1927, George Valentin compte parmi les plus grandes vedettes du cinéma muet, mais l'irruption du parlant va mettre un terme brutal à sa carrière. L'acteur ne tourne plus et sombre dans l'oubli. A l'inverse, Peppy Miller, une jeune figurante, devient la nouvelle étoile de Hollywood...",
+                "large": "A Hollywood, en 1927, George Valentin compte parmi les plus grandes vedettes du cinéma, et sa célébrité n'a d'égal que son orgueil. Son producteur, Al Zimmer, l'invite à la projection de son dernier film, à la sortie duquel il croise Peppy Miller, une comédienne débutante. La jeune femme devient figurante dans un long métrage en tournage aux côtés de George. Les deux acteurs se plaisent aussitôt, mais George refuse de s'engager. C'est alors que le parlant fait son apparition. George, persuadé que cette technologie est sans avenir, va jusqu'à se séparer d'Al pour produire un film muet. Parallèlement, Peppy devient la nouvelle égérie du studio..."
+              },
+              "color": "0",
+              "productionNationality": "France - Belgique",
+              "productionYear": "2011",
+              "updateDate": "2014-12-08T20:12:08.000+0000",
+              "id": 585877,
+              "num": 1,
+              "lang": "fr",
+              "version": "20141208201208",
+              "ratingCSA": 1,
+              "duration": "100",
+              "boost": 32715,
+              "diffusionDate": "2012-10-05T18:55:00.000+0000"
+            },
+            {
+              "objectType": "UNIT",
+              "contentType": "FILM",
+              "itemType": "movie",
+              "titles": {
+                "originalTitle": "The Artist",
+                "epgTitle": "The Artist",
+                "titleDivisible": "The Artist",
+                "subTitleDivisible": "Film Comédie dramatique"
+              },
+              "synopsis": {
+                "small": "En 1927, un acteur, vedette du cinéma muet, sombre dans l'oubli avec l'arrivée du parlant et assiste à l'ascension irrésistible d'une ancienne figurante.",
+                "medium": "A Hollywood, en 1927, George Valentin compte parmi les plus grandes vedettes du cinéma muet, mais l'irruption du parlant va mettre un terme brutal à sa carrière. L'acteur ne tourne plus et sombre dans l'oubli. A l'inverse, Peppy Miller, une jeune figurante, devient la nouvelle étoile de Hollywood...",
+                "large": "A Hollywood, en 1927, George Valentin compte parmi les plus grandes vedettes du cinéma, et sa célébrité n'a d'égal que son orgueil. Son producteur, Al Zimmer, l'invite à la projection de son dernier film, à la sortie duquel il croise Peppy Miller, une comédienne débutante. La jeune femme devient figurante dans un long métrage en tournage aux côtés de George. Les deux acteurs se plaisent aussitôt, mais George refuse de s'engager. C'est alors que le parlant fait son apparition. George, persuadé que cette technologie est sans avenir, va jusqu'à se séparer d'Al pour produire un film muet. Parallèlement, Peppy devient la nouvelle égérie du studio..."
+              },
+              "color": "0",
+              "productionNationality": "France - Belgique",
+              "productionYear": "2011",
+              "updateDate": "2014-12-08T20:12:08.000+0000",
+              "id": 585877,
+              "num": 1,
+              "lang": "fr",
+              "version": "20141208201208",
+              "ratingCSA": 1,
+              "duration": "100",
+              "boost": 32715,
+              "diffusionDate": "2012-10-05T18:55:00.000+0000"
+            }
+          ],
+          "paging": {
+            "previous": null,
+            "next": "/api/events/1/2012/2?page=2"
+          }
+        }
+        
