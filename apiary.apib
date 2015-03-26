@@ -18,8 +18,6 @@ Provides the editorial data
 - TODO : add jobs in member list
 - TODO : members changer order en rank
 - TODO : Festival mettre le code ISO
-- OK TODO : Ajouter /api/media/id/file POST
-- OK TODO : Tags : /api/tags POST PUT
 - TODO : Subchild /api/content/id/subobject
 
 ## Date
@@ -129,6 +127,12 @@ Retrieve channel list
                 "sd": "56377",
                 "master": "56378"
               }
+              "logos": [
+                {   "type": "img_petite",
+                    "url": "http://<mediaserverbddpe>/CHNCOU_1420120912.jpg"
+                }
+              ]
+              
             },
             {
               "id": "56379",
@@ -279,9 +283,8 @@ Return the genre object and sub collection
         {
             "id": "1",
             "name": "Cinéma",
-            "rank": "1",
-            "updateDate": "2015-01-19T20:18:12.000+0100"
-            "subcollection": [
+            "updateDate": "2015-01-19T20:18:12.000+0100",
+            "subgenre": [
                   {
                     "id": "1",
                     "name": "Film Action",
@@ -455,9 +458,10 @@ Update a new tag. Only for `EDUCATION` and `MOTCLE`
 
 + Response 200 (application/json)
 
-  + Headers
-
-            Location: /api/tags/EDUCATION/69
+        {
+          "id": 1,
+          "label": "Cinéma"
+        }
 
 # Group Media
 Property | Required | Description
@@ -517,7 +521,7 @@ Return the list of media.
           "imgType": "STD",
         }
 
-+ Response 200 (application/json)
++ Response 201 (application/json)
 
   + Headers
 
@@ -575,7 +579,7 @@ The HTTP headers to use when making a simple upload request include:
 ### Upload media file [PUT]
 
 
-+ Response 201 (application/json)
++ Response 204 (application/json)
 
 
 # Group Content
@@ -688,7 +692,7 @@ This method allow users to create collection.
 
   + Headers
 
-            Location: /api/contents/99999999/summary
+            Location: /api/contents/99999999
 
 ## Content [/api/contents/{id}]
 
@@ -749,8 +753,9 @@ Collections rules could be also updated using this method.
           },
         }
 
-+ Response 204 (application/json)
-
++ Response 200 (application/json)
+    
+        TODO
 
 ### Delete a content [DELETE]
 
@@ -787,7 +792,7 @@ This method allow users to delete a content. Only collection are deletable.
               "format": "image/jpeg",
               "name": "169_298296.jpg",
               "imgType": "STD169",
-              "rank": 1,
+              "rank": 2,
               "id": 191284,
               "updateDate": "2013-09-23T12:07:47.000+0000",
               "path": "http://<plmphoto>/169/14876/169_298296.jpg"
@@ -799,7 +804,7 @@ This method allow users to delete a content. Only collection are deletable.
               "format": "image/jpeg",
               "name": "ANT_1075478_1_804.jpg",
               "imgType": "STD",
-              "rank": 1,
+              "rank": 3,
               "id": 291889,
               "updateDate": "2012-10-05T17:33:41.000+0000",
               "path": "http://<atgphoto>/804/jpg/ANT_1075478_1_804.jpg"
@@ -857,12 +862,14 @@ This method allow users to delete a content. Only collection are deletable.
 ## Media link [/api/contents/{id}/media/{mediaId}]
 
 
+
 + Parameters
   + id (required, number, `1`) ... Numeric `id` of the content.
   + mediaId (required, number, `12752996`) ... Numeric `id` of the media.
 
 ### Attach a media [PUT]
 
+**TODO** ADD Rank to the list
 Attach the given mediaId to the current content
 
 
@@ -871,7 +878,7 @@ Attach the given mediaId to the current content
 
 ### dettach a media [DELETE]
 
-Attach the given mediaId to the current content
+dettach the given mediaId to the current content
 
 + Response 204 (application/json)
 
@@ -1084,6 +1091,7 @@ When the GET method will be called a merged version will be generated.
 
 ## Overloads [/api/contents/{id}/overloads]
 
+**NOT Needed in MVP**
 Return the list of the broadcast overloads attached to the given id. The content represent an abstract object. 
 In a broadcast cast we allow user to overload informations. A broadcast is a couple of a provider id and the broadcast id.
 To retrieve the overload content use the `/api/overloads/` 
@@ -1106,7 +1114,7 @@ To retrieve the overload content use the `/api/overloads/`
         ]
 
 
-+ response 204 (application/json)
+
 
 ## Manage overloads [/api/contents/{id}/overloads/{providerId}/{assetId}]
 
